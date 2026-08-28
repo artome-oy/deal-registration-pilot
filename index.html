@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deal Registration — Artome</title>
+<meta name="description" content="Register your Artome deal and secure deal registration protection.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,300;6..12,400;6..12,600;6..12,700;6..12,800;6..12,900&display=swap" rel="stylesheet">
+<style>
+/* ---------------------------------------------------------------------------
+   Artome brand tokens. Brand colours are used in full tone only — never
+   lightened, darkened or made transparent. Beak Orange is a highlight accent.
+   --------------------------------------------------------------------------- */
+:root{
+  --black:#000000;
+  --white:#FFFFFF;
+  --orange:#ECAA1D;   /* Beak Orange — accent only, used sparingly */
+  --navy:#154358;     /* Dark Navy — dark backgrounds, headings */
+  --grey-dark:#262626;
+  --grey-mid:#7F7F7F;
+  --grey-light:#D9D9D9;
+  --divider:#EBEBEB;
+  --page:#F5F5F5;
+  --danger:#B3261E;
+  --radius:12px;
+  --radius-lg:16px;
+  --shadow:0 1px 3px rgba(0,0,0,.06);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  font-family:'Nunito Sans',Arial,Helvetica,sans-serif;
+  font-weight:300;               /* Light body on light backgrounds */
+  background:var(--page);
+  color:var(--grey-dark);
+  -webkit-font-smoothing:antialiased;
+  line-height:1.5;
+}
+a{color:var(--navy);text-underline-offset:2px}
+a:hover{color:var(--orange)}
+h1,h2,h3{margin:0;line-height:1.2}
+img,svg{max-width:100%}
+
+/* Focus is always visible — never remove it without a replacement. */
+:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+.on-navy :focus-visible{outline-color:var(--orange)}
+
+/* --- Logo. Height is locked, width derives from the viewBox (5.45:1). ------ */
+.logo{display:block;width:auto;color:var(--black)}
+.logo--sm{height:18px}
+.logo--md{height:22px}
+
+/* --- Laserline: orange rule with a round dot at the end. ------------------- */
+.laser{display:flex;align-items:center;margin-top:10px}
+.laser i{display:block;height:2px;background:var(--orange);width:56px}
+.laser b{display:block;width:7px;height:7px;border-radius:50%;background:var(--orange)}
+.laser--lg i{width:64px}
+.laser--lg b{width:8px;height:8px}
+
+/* --- Left accent bar: Beak Orange, full height, left edge. ----------------- */
+.accent-bar{position:fixed;left:0;top:0;bottom:0;width:6px;background:var(--orange);z-index:20}
+
+/* --- Forms ---------------------------------------------------------------- */
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label,.field .fieldlabel{font-weight:700;font-size:13px;color:var(--grey-dark)}
+.hint{font-size:12px;color:var(--grey-mid);font-weight:300}
+input,select,button,textarea{font-family:inherit;font-size:inherit}
+input[type=text],input[type=email],input[type=tel],input[type=date],select{
+  width:100%;border:1px solid var(--grey-light);border-radius:8px;
+  padding:12px 14px;font-size:15px;font-weight:400;color:var(--grey-dark);
+  background:var(--white);
+}
+select{padding:12px 10px;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237F7F7F' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;background-size:12px;padding-right:34px}
+input::placeholder{color:#B5B5B5}
+input[aria-invalid=true],select[aria-invalid=true]{border-color:var(--danger)}
+.readonly{background:var(--page);border:1px solid var(--divider);border-radius:8px;
+  padding:12px 14px;font-size:15px;font-weight:700;color:var(--grey-dark);
+  overflow-wrap:anywhere}
+
+.btn{border:none;border-radius:10px;padding:14px 26px;font-size:15px;font-weight:800;
+  cursor:pointer;transition:background .12s,color .12s,border-color .12s;line-height:1.2}
+.btn:disabled{cursor:not-allowed;opacity:.35}
+.btn--primary{background:var(--orange);color:var(--black)}
+.btn--primary:hover:not(:disabled){background:var(--black);color:var(--white)}
+.btn--dark{background:var(--black);color:var(--white)}
+.btn--dark:hover:not(:disabled){background:var(--navy)}
+.btn--ghost{background:var(--white);color:var(--grey-dark);border:1px solid var(--grey-light)}
+.btn--ghost:hover:not(:disabled){border-color:var(--navy)}
+.btn--link{background:none;border:none;color:var(--grey-mid);font-size:13px;font-weight:600;
+  text-decoration:underline;cursor:pointer;padding:0}
+.btn--link:hover{color:var(--navy)}
+.btn--block{width:100%}
+
+.error{font-size:13px;font-weight:700;color:var(--danger)}
+
+/* --- Login ---------------------------------------------------------------- */
+.login{min-height:100vh;min-height:100dvh;background:var(--navy);display:flex;
+  align-items:center;justify-content:center;padding:24px}
+.login__card{background:var(--white);border-radius:14px;padding:40px;width:400px;
+  max-width:100%;display:flex;flex-direction:column;gap:16px}
+.login__card h1{font-size:28px;font-weight:900;color:var(--black)}
+.note{background:var(--page);border-radius:8px;padding:12px 14px;font-size:13px;color:var(--grey-mid)}
+
+/* --- App shell ------------------------------------------------------------ */
+.shell{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:16px;
+  padding:16px 40px;background:var(--white);border-bottom:1px solid var(--grey-light);
+  flex-wrap:wrap;margin-left:6px}   /* clears the left accent bar */
+.nav__brand{display:flex;align-items:baseline;gap:14px;min-width:0}
+.nav__brand span{font-size:13px;font-weight:600;color:var(--grey-mid);white-space:nowrap}
+.nav__right{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.pill{font-size:13px;font-weight:700;background:var(--page);border-radius:999px;padding:7px 14px}
+.main{flex:1;display:flex;flex-direction:column;align-items:center;padding:48px 24px 96px}
+.col{width:680px;max-width:100%}
+
+/* --- Stepper -------------------------------------------------------------- */
+.steps{display:flex;align-items:flex-start;margin:32px 0 24px}
+.steps__line{flex:1;height:2px;margin:15px 8px 0;background:var(--grey-light)}
+.steps__line.is-done{background:var(--navy)}
+.step{display:flex;flex-direction:column;align-items:center;gap:6px;width:74px;flex:none}
+.step__dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:13px;font-weight:800;background:#E3E3E3;color:var(--grey-mid)}
+.step.is-active .step__dot{background:var(--orange);color:var(--black)}
+.step.is-done .step__dot{background:var(--navy);color:var(--white)}
+.step__label{font-size:11px;font-weight:700;color:#9A9A9A;text-align:center}
+.step.is-active .step__label,.step.is-done .step__label{color:var(--grey-dark)}
+
+/* --- Card ----------------------------------------------------------------- */
+.card{background:var(--white);border-radius:var(--radius-lg);border-top:4px solid var(--orange);
+  padding:36px 40px;box-shadow:var(--shadow)}
+.card h2{font-size:20px;font-weight:800;color:var(--navy);margin-bottom:20px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid .span-2{grid-column:1/-1}
+.sep{margin-top:24px;padding-top:22px;border-top:1px solid var(--divider)}
+
+/* --- Choice buttons (demo status) ----------------------------------------- */
+.choices{display:flex;gap:10px;flex-wrap:wrap;margin:0;padding:0;border:0}
+.choice{flex:1 1 150px;min-width:150px;text-align:left;background:var(--white);
+  border:1px solid var(--grey-light);border-radius:10px;padding:13px 15px;cursor:pointer}
+.choice:hover{border-color:var(--navy)}
+.choice strong{display:block;font-size:14px;font-weight:800;color:var(--black)}
+.choice span{display:block;font-size:12px;font-weight:300;color:var(--grey-mid);margin-top:2px}
+.choice[aria-pressed=true]{background:var(--navy);border-color:var(--navy)}
+.choice[aria-pressed=true] strong{color:var(--white)}
+.choice[aria-pressed=true] span{color:#BBD0D9}
+
+/* --- Product rows --------------------------------------------------------- */
+.product{display:flex;justify-content:space-between;align-items:center;gap:16px;
+  border:1px solid var(--grey-light);border-radius:var(--radius);padding:16px 18px}
+.product.is-selected{border-color:var(--navy)}
+.product__name{font-size:16px;font-weight:800;color:var(--black);
+  display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+/* End-of-life marker. Functional grey, not Beak Orange — orange is a highlight
+   accent in this brand, never a warning colour. */
+.eol{font-size:11px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;
+  color:var(--grey-mid);background:var(--page);border:1px solid var(--grey-light);
+  border-radius:999px;padding:3px 9px;white-space:nowrap}
+.stepper{display:flex;align-items:center;gap:10px}
+.stepper button{width:34px;height:34px;border:1px solid var(--grey-light);border-radius:8px;
+  background:var(--white);font-size:18px;font-weight:700;cursor:pointer;line-height:1}
+.stepper button:hover:not(:disabled){border-color:var(--navy)}
+.stepper button:disabled{opacity:.35;cursor:not-allowed}
+.stepper output{width:28px;text-align:center;font-size:16px;font-weight:800}
+
+/* --- Benefit callout (Dark Navy, Regular body weight on colour) ------------ */
+.benefit{background:var(--navy);color:var(--white);border-radius:var(--radius);
+  padding:18px 20px;font-weight:400}
+.benefit strong{color:var(--orange);font-weight:900}
+.benefit p{margin:6px 0 0;font-size:13px;color:#BBD0D9}
+
+/* --- Review table --------------------------------------------------------- */
+.review{display:flex;flex-direction:column}
+.review__row{display:flex;justify-content:space-between;gap:24px;padding:11px 0;
+  border-bottom:1px solid var(--divider);font-size:14px}
+.review__row dt{color:var(--grey-mid);font-weight:600}
+.review__row dd{margin:0;font-weight:700;text-align:right;overflow-wrap:anywhere}
+
+.wizard-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:20px}
+
+/* --- Done ----------------------------------------------------------------- */
+.done{background:var(--white);border-radius:var(--radius-lg);border-top:4px solid var(--orange);
+  padding:56px;box-shadow:var(--shadow);margin-top:40px}
+.done h1{font-size:40px;font-weight:900;color:var(--black)}
+.done p{font-weight:300;line-height:1.7}
+.ref{display:inline-block;margin-top:24px;background:var(--page);border-radius:8px;
+  padding:12px 16px;font-size:14px;color:var(--grey-mid)}
+.ref strong{display:block;font-size:16px;font-weight:800;color:var(--grey-dark);
+  letter-spacing:.5px;overflow-wrap:anywhere}
+
+/* --- Preview banner ------------------------------------------------------- */
+.preview{background:var(--black);color:var(--white);font-size:12px;font-weight:700;
+  text-align:center;padding:8px 16px;position:relative;z-index:30}
+.preview span{color:var(--orange)}
+
+.hidden{display:none !important}
+.visually-hidden{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* --- Responsive ----------------------------------------------------------- */
+@media (max-width:720px){
+  .nav{padding:14px 20px 14px 22px}
+  .main{padding:32px 16px 64px;padding-left:22px}
+  .card{padding:24px 20px}
+  .done{padding:32px 24px}
+  .done h1{font-size:30px}
+  .grid{grid-template-columns:1fr}
+  .steps__line{margin-left:4px;margin-right:4px}
+  .step{width:auto;flex:1 1 0;min-width:0}
+  .step__label{font-size:10px}
+  .product{flex-direction:column;align-items:flex-start;gap:12px}
+  .login{padding:16px}
+  .login__card{padding:28px 22px}
+  .login__card h1{font-size:24px}
+  .wizard-nav .btn{padding:14px 18px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+
+<!-- Logo symbol: defined once, referenced wherever the wordmark appears.
+     The outer <svg> carries the same viewBox, so the 5.45:1 ratio can never
+     be broken by setting height alone. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="artome-logo" viewBox="0 0 963.8 177.2"><g fill="currentColor"><path d="M733.7,57.4c1.8,1.8,4.5,2.2,6.7,1,.5-.3.9-.6,1.4-1s.8-.8,1.3-1.3c.8-.8,1.7-1.7,2.5-2.5,3.4-3.4,6.7-6.7,10.1-10.1,6.7-6.7,13.5-13.5,20.2-20.2,3.4-3.4,6.7-6.7,10.1-10.1,1.7-1.7,3.4-3.4,5.1-5.1s1.7-1.7,2.5-2.5c1-1,1.5-1.5,2.6-2.3,4-2.8,9.1-3.3,13.6-1.5,4.5,1.9,7.7,6,8.5,10.8.7,4.2-.5,8.4-3.3,11.6-.2.2-.3.4-.5.6-.2.2-.4.4-.6.6l-1.1,1.1c-1.4,1.4-2.8,2.8-4.2,4.2-2.8,2.8-5.6,5.6-8.4,8.4-5.6,5.6-11.2,11.2-16.8,16.8-9,9-17.9,17.9-26.9,26.9s-4.5,4.5-6.7,6.7c-.6.6-1.1,1.1-1.7,1.7s-.5.5-.7.7c-.3.3-.6.5-.9.8-1.3,1-2.8,1.8-4.4,2.3-3.7,1.2-7.8.8-11.2-1.1-.9-.5-1.6-1-2.4-1.6-.4-.3-.8-.7-1.1-1.1l-1.4-1.4c-1.8-1.8-3.7-3.7-5.5-5.5-7.4-7.4-14.8-14.8-22.2-22.2-7-7-13.9-13.9-20.9-20.9s-7-7-10.4-10.4l-5.2-5.2c-.4-.4-.7-.7-1.1-1.1-.3-.3-.6-.6-.8-1-.5-.7-1-1.5-1.4-2.3-2.2-4.5-2-9.8.8-14,1.2-1.9,2.9-3.5,4.8-4.6,2.1-1.2,4.5-1.9,7-1.9,2.5,0,4.9.6,7,1.8,1,.6,1.9,1.2,2.7,2,.4.4.9.8,1.2,1.2l1.3,1.3c3.4,3.4,6.7,6.7,10.1,10.1,13.5,13.5,27,27,40.4,40.4Z"/><path d="M656.9,162.3c0-21.4,0-42.7,0-64.1,0-5.4,0-10.7,0-16.1,0-.7,0-1.3,0-2,0-.3,0-.7,0-1,0-.3,0-.6,0-.9,0-1.3.3-2.5.6-3.7.8-2.6,2.4-5,4.5-6.7,4.2-3.4,9.9-4.2,14.8-2,2.6,1.2,4.7,3.1,6.2,5.5,1.4,2.2,2.1,4.8,2.1,7.5,0,21.4,0,42.7,0,64.1,0,5.4,0,10.7,0,16.1,0,.7,0,1.3,0,2,0,.3,0,.7,0,1,0,.3,0,.6,0,.9,0,1.3-.3,2.5-.6,3.7-.8,2.6-2.4,5-4.5,6.7-4.2,3.4-9.9,4.2-14.8,2-5.1-2.3-8.4-7.3-8.4-12.9Z"/><path d="M902.1,74.4h39.7c.8,0,1.6,0,2.4.2,7.3,1.2,12.3,7.8,11.7,15.2-.6,7.3-6.8,13-14.1,13h-39.7c-.8,0-1.6,0-2.4-.2-7.3-1.2-12.3-7.8-11.7-15.2.6-7.3,6.8-13,14.1-13Z"/><path d="M880.9,148.1h62.3c1.9,0,3.8,0,5.7,0,3.7,0,7.2,1.4,9.8,4,2.6,2.6,4.2,6.1,4.3,9.7.1,3.7-1.2,7.3-3.7,10-2.5,2.7-6,4.4-9.7,4.6-.6,0-2.2,0-2.8,0h-85.2c-1.1,0-1.7,0-2.8-.2-3.7-.6-7.1-2.6-9.3-5.6-1.1-1.5-1.9-3.2-2.4-5.1-.2-.9-.3-1.8-.4-2.7,0-.5,0-.9,0-1.4V20.3c0-.5,0-5,0-5.5,0-3.7,1.5-7.3,4.1-9.9,2.6-2.6,6.2-4.1,9.9-4.2.7,0,2.1,0,2.8,0h82.5c.9,0,1.9,0,2.8,0,.9,0,1.8,0,2.7.3,3.7.7,6.9,2.9,9,6,2.1,3.1,2.9,6.9,2.2,10.5-.7,3.7-2.8,6.9-5.8,9-1.5,1.1-3.2,1.8-5.1,2.2-.9.2-1.8.3-2.7.3-.4,0-2.4,0-2.8,0h-64.2c-.2,0-1.3,0-1.4,0-.9,0-1.8.3-2.6.7-1.6.9-2.7,2.5-2.9,4.4,0,.4,0,1,0,1.4,0,.5,0,.9,0,1.4,0,.9,0,1.8,0,2.7,0,7.3,0,14.6,0,21.9,0,15,0,29.9,0,44.9,0,7.5,0,15,0,22.4,0,3.7,0,7.5,0,11.2,0,.5,0,.9,0,1.4,0,.4,0,1,0,1.4,0,.9.4,1.8.9,2.6,1,1.6,2.8,2.6,4.8,2.6Z"/><path d="M454.3.7c5.9,0,11.2,3.7,13.3,9.2,1,2.6,1.2,5.4.6,8.1-.7,2.9-2.2,5.6-4.5,7.5-1.6,1.4-3.6,2.5-5.7,3-1,.3-2,.4-3,.5-.6,0-1.2,0-1.8,0h-23c-5.9,0-11.2-3.7-13.3-9.2-1-2.6-1.2-5.4-.6-8.1.7-2.9,2.2-5.6,4.5-7.5,1.6-1.4,3.6-2.5,5.7-3,1-.3,2-.4,3-.5.6,0,1.2,0,1.8,0h23Z"/><path d="M632.8,88.6c0,11.1-2.1,22-6.2,32.3-4.4,11.2-11.1,21.3-19.6,29.8-8.5,8.5-18.6,15.1-29.8,19.6-10.3,4.1-21.3,6.2-32.3,6.2s-22-2.1-32.3-6.2c-11.2-4.4-21.3-11.1-29.8-19.6-8.5-8.5-15.1-18.6-19.6-29.8-4.1-10.3-6.2-21.3-6.2-32.3s2.1-22,6.2-32.3c4.4-11.2,11.1-21.3,19.6-29.8,8.5-8.5,18.6-15.1,29.8-19.6,10.3-4.1,21.3-6.2,32.3-6.2s22,2.1,32.3,6.2c11.2,4.4,21.3,11.1,29.8,19.6,8.5,8.5,15.1,18.6,19.6,29.8,4.1,10.3,6.2,21.3,6.2,32.3ZM604.5,88.6c0-7.5-1.4-14.9-4.2-21.9-3-7.6-7.5-14.4-13.3-20.2-5.8-5.8-12.6-10.3-20.2-13.3-7-2.8-14.4-4.2-21.9-4.2s-14.9,1.4-21.9,4.2c-7.6,3-14.4,7.5-20.2,13.3-5.8,5.8-10.3,12.6-13.3,20.2-2.8,7-4.2,14.4-4.2,21.9s1.4,14.9,4.2,21.9c3,7.6,7.5,14.4,13.3,20.2,5.8,5.8,12.6,10.3,20.2,13.3,7,2.8,14.4,4.2,21.9,4.2s14.9-1.4,21.9-4.2c7.6-3,14.4-7.5,20.2-13.3,5.8-5.8,10.3-12.6,13.3-20.2,2.8-7,4.2-14.4,4.2-21.9Z"/><path d="M818.5,162.3c0,5.6-3.3,10.6-8.4,12.9-4.9,2.2-10.7,1.4-14.8-2-2.1-1.8-3.7-4.1-4.5-6.7-.4-1.2-.6-2.4-.6-3.7,0-.3,0-.6,0-.9,0-.3,0-.7,0-1,0-.7,0-1.3,0-2,0-5.4,0-10.7,0-16.1,0-10.7,0-21.4,0-32,0-5.3,0-10.7,0-16,0-5.3,0-10.7,0-16s3.3-10.6,8.4-12.9c4.9-2.2,10.7-1.4,14.8,2,2.1,1.8,3.7,4.1,4.5,6.7.4,1.2.6,2.4.6,3.7,0,.3,0,.6,0,.9,0,.3,0,.7,0,1,0,.7,0,1.3,0,2,0,5.4,0,10.7,0,16.1,0,21.4,0,42.7,0,64.1Z"/><path d="M88.8,59.4c-.8-1.7-2.4-2.9-4.2-3.2-1.8-.3-3.7.3-5,1.6-.3.3-.6.7-.8,1.1-.2.3-.4.9-.6,1.2-.4.8-.8,1.7-1.2,2.5-.8,1.7-1.5,3.3-2.3,5-3.1,6.6-6.2,13.2-9.2,19.8-6.2,13.2-12.3,26.4-18.5,39.6-6.2,13.2-12.3,26.4-18.5,39.6-.2.4-.4.8-.6,1.2-.2.4-.4.8-.6,1.2-.4.8-.9,1.5-1.5,2.3-1.2,1.4-2.6,2.6-4.3,3.5-3.3,1.7-7.1,2.1-10.6,1.1-3.5-1-6.5-3.4-8.4-6.6s-2.3-7-1.4-10.6c.1-.4.3-.9.4-1.3.2-.4.3-.8.5-1.2.4-.8.8-1.7,1.2-2.5l2.3-5c1.5-3.3,3.1-6.6,4.6-9.9,3.1-6.6,6.2-13.2,9.2-19.8,6.2-13.2,12.3-26.4,18.5-39.6,6.2-13.2,12.3-26.4,18.5-39.6,3.1-6.6,6.2-13.2,9.2-19.8,1.5-3.3,3.1-6.6,4.6-9.9.4-.8.7-1.6,1.2-2.4.5-.8,1-1.5,1.6-2.2,1.2-1.4,2.7-2.5,4.4-3.4,3.3-1.6,7.1-1.9,10.5-.8,3.6,1.1,6.5,3.6,8.2,6.9.2.5.9,2,1.2,2.4.4.8.8,1.7,1.2,2.5.8,1.7,1.5,3.3,2.3,5,1.5,3.3,3.1,6.6,4.6,9.9,6.2,13.2,12.3,26.4,18.5,39.6,12.3,26.4,24.6,52.8,37,79.3.8,1.7,1.5,3.3,2.3,5,.4.8.8,1.7,1.2,2.5.2.4.4.8.6,1.2.2.4.4.8.6,1.2,1.4,3.4,1.4,7.2,0,10.7-1.4,3.4-4,6.2-7.4,7.7s-7.2,1.6-10.7.3c-3.5-1.3-6.3-3.9-7.9-7.2-.2-.4-.4-.8-.6-1.2-.2-.4-.4-.8-.6-1.2-.4-.8-.8-1.7-1.2-2.5-.8-1.7-1.5-3.3-2.3-5-3.1-6.6-6.2-13.2-9.2-19.8-12.3-26.4-24.6-52.8-37-79.3Z"/><path d="M374.9,34.7c0-1.8-.9-3.5-2.3-4.6-.7-.5-1.5-.9-2.4-1-.4,0-.7,0-1.1,0h-31c-.5,0-1,0-1.6,0-.9,0-1.7,0-2.6-.3-1.7-.3-3.4-1-4.9-2-3-1.9-5.2-4.9-6.1-8.3-.9-3.2-.6-6.6.8-9.6,1.4-3,3.7-5.4,6.7-6.9,1.5-.7,3.1-1.2,4.7-1.3.4,0,.8,0,1.2,0,.3,0,.6,0,.9,0h50.4c.5,0,1,0,1.4,0,.7,0,1.4,0,2.2.2,1.5.2,2.9.7,4.2,1.4,2.6,1.3,4.8,3.4,6.1,6,.7,1.3,1.2,2.7,1.4,4.2.1.7.2,1.4.2,2.2,0,.3,0,1.9,0,2.2v145.1c0,.7,0,1.1,0,1.8,0,.6-.1,1.2-.3,1.8-.3,1.2-.7,2.4-1.3,3.5-2.4,4.6-7.1,7.5-12.3,7.6-2.4,0-4.9-.6-7-1.7-2.3-1.3-4.2-3.1-5.5-5.4-1.2-2.1-1.8-4.5-1.8-7V34.7Z"/><path d="M248.3,104.8c-.4-.6-1-1.2-1.6-1.6-.3-.2-.7-.4-1-.5-.4-.2-.7-.2-1.1-.3-1.5-.3-2.9-.8-4.2-1.6-2.8-1.6-4.9-4-6.1-7-1.1-2.7-1.3-5.7-.7-8.5.7-3.1,2.4-5.8,4.9-7.8,2.4-1.9,5.3-3,8.3-3.2.4,0,.7,0,1.1,0h1.1c.8,0,1.5,0,2.3,0h9.1c.6,0,1.2,0,1.9,0,.5,0,.9,0,1.4,0,1.9-.2,3.7-.6,5.5-1.2,3.5-1.2,6.7-3.3,9.2-6.1,2.5-2.8,4.4-6.1,5.3-9.8,1.9-7.4-.1-15.2-5.2-20.8-2.2-2.4-4.8-4.2-7.7-5.5-1.5-.6-3-1.1-4.6-1.4-.8-.2-1.6-.3-2.4-.3-.4,0-.8,0-1.2,0-.5,0-.9,0-1.4,0h-34.1c-.3,0-.6,0-1,0-1.3,0-2.6.5-3.6,1.3-1,.9-1.7,2.1-1.9,3.4,0,.3,0,.6,0,.9,0,.3,0,.6,0,1v126.2c0,.6,0,1,0,1.7,0,.6-.1,1.1-.2,1.7-.2,1.2-.6,2.3-1.1,3.3-2.1,4.4-6.4,7.4-11.3,8-2.2.2-4.5,0-6.6-.9-2.3-.9-4.3-2.4-5.9-4.3-1.5-1.9-2.5-4.1-3-6.4-.2-1.3-.2-2-.2-3.3V15.1c0-.3,0-.6,0-.9,0-.3,0-.6,0-.9.1-1.2.4-2.3.8-3.4.8-2.2,2.2-4.2,3.9-5.7,1.8-1.6,3.9-2.7,6.3-3.2.6-.1,1.2-.2,1.7-.3.7,0,1.1,0,1.7,0h54.5c1,0,2.1,0,3.1,0,2.5.1,4.9.4,7.4.9,10.5,2.1,20,7.5,27.3,15.3,7,7.6,11.6,17,13.1,27.3,1.5,10.3-.1,20.9-4.8,30.2-4.1,8.2-10.3,15.1-18,20.1-.9.6-1.8,1.1-2.8,1.7-.4.2-.9.5-1.3.7-.2.1-.4.2-.6.4-.8.6-1.5,1.4-1.9,2.3-.4.9-.6,1.9-.5,2.9,0,1,.4,1.9,1,2.7,4.5,6.5,9,13,13.5,19.5,4.5,6.5,9,13,13.5,19.5l6.8,9.7c.3.4.5.8.8,1.2.2.4.5.9.7,1.3.4.9.7,1.9.9,2.8.4,1.9.4,3.9,0,5.9-1,4.7-4.3,8.6-8.7,10.3-4.5,1.7-9.5,1.1-13.4-1.7-1-.7-1.8-1.5-2.6-2.4-.4-.5-.7-.8-1-1.4-.3-.5-.7-1-1-1.4-1.3-1.9-2.7-3.9-4-5.8-2.7-3.9-5.4-7.7-8-11.6-10.7-15.4-21.4-30.9-32.2-46.3Z"/></g></symbol>
+</svg>
+
+<div id="preview-banner" class="preview hidden">
+  Preview mode — <span>not connected to the backend</span>. Submissions are not recorded and no lead is created in Pipedrive.
+</div>
+
+<!-- =====================  LOGIN  ===================================== -->
+<div class="accent-bar" aria-hidden="true"></div>
+
+<section id="screen-login" class="login on-navy">
+  <form class="login__card" id="login-form" novalidate>
+    <svg class="logo logo--md" viewBox="0 0 963.8 177.2" role="img" aria-label="Artome"><use href="#artome-logo"/></svg>
+    <div>
+      <h1>Partner access</h1>
+      <div class="laser" aria-hidden="true"><i></i><b></b></div>
+    </div>
+    <p style="margin:0;font-size:14px">
+      Deal registration is for authorized Artome partners. Enter your work email
+      and we'll send you a sign-in link.
+    </p>
+    <div class="field">
+      <label for="login-email">Work email</label>
+      <input id="login-email" name="email" type="email" autocomplete="email"
+             inputmode="email" placeholder="you@yourcompany.com" required>
+    </div>
+    <p class="error hidden" id="login-error" role="alert"></p>
+    <button type="submit" class="btn btn--primary btn--block" id="login-submit">Send sign-in link</button>
+    <p class="hint" style="margin:0">
+      Not a partner yet? <a href="mailto:sales@artomeusa.com">sales@artomeusa.com</a>
+    </p>
+  </form>
+</section>
+
+<!-- =====================  LINK SENT  ================================= -->
+<section id="screen-sent" class="login on-navy hidden">
+  <div class="login__card">
+    <svg class="logo logo--md" viewBox="0 0 963.8 177.2" role="img" aria-label="Artome"><use href="#artome-logo"/></svg>
+    <div>
+      <h1>Check your email</h1>
+      <div class="laser" aria-hidden="true"><i></i><b></b></div>
+    </div>
+    <p style="margin:0;font-size:14px">
+      If <strong style="font-weight:800" id="sent-email">your address</strong> belongs to an authorized
+      Artome partner, a sign-in link is on its way. The link is valid for one hour.
+    </p>
+    <div class="note">Nothing arrived? Check your spam folder, or contact
+      <a href="mailto:sales@artomeusa.com">sales@artomeusa.com</a>.</div>
+    <button type="button" class="btn btn--ghost btn--block" id="use-other-email">Use a different email</button>
+    <button type="button" class="btn btn--dark btn--block hidden" id="preview-signin">
+      Open the sign-in link (preview only)
+    </button>
+  </div>
+</section>
+
+<!-- =====================  APP  ======================================= -->
+<div id="screen-app" class="shell hidden">
+  <nav class="nav">
+    <div class="nav__brand">
+      <svg class="logo logo--sm" viewBox="0 0 963.8 177.2" role="img" aria-label="Artome"><use href="#artome-logo"/></svg>
+      <span>Deal Registration</span>
+    </div>
+    <div class="nav__right">
+      <div class="pill" id="partner-pill">&nbsp;</div>
+      <button type="button" class="btn--link" id="sign-out">Sign out</button>
+    </div>
+  </nav>
+
+  <main class="main">
+    <!-- ---------- Wizard ---------- -->
+    <div class="col" id="wizard">
+      <h1 style="font-size:36px;font-weight:900;color:var(--black)">Register your deal.</h1>
+      <div class="laser laser--lg" aria-hidden="true"><i></i><b></b></div>
+      <p style="margin:14px 0 0;font-size:15px">
+        Four quick steps. Once approved, your deal is protected for
+        <strong style="font-weight:800" id="intro-days">—</strong> days.
+      </p>
+
+      <ol class="steps" id="stepper" aria-label="Progress"></ol>
+
+      <div class="card">
+        <!-- Step 1 -->
+        <section class="step-panel" data-panel="1">
+          <h2>Your details</h2>
+          <div class="grid">
+            <div class="field span-2">
+              <span class="fieldlabel" id="lbl-company">Company</span>
+              <div class="readonly" id="f-company" role="note" aria-labelledby="lbl-company">—</div>
+            </div>
+            <div class="field">
+              <label for="f-cname">Your name</label>
+              <input id="f-cname" data-model="cname" type="text" autocomplete="name" placeholder="Jane Doe">
+            </div>
+            <div class="field">
+              <label for="f-ctitle">Job title <span class="hint">(optional)</span></label>
+              <input id="f-ctitle" data-model="ctitle" type="text" autocomplete="organization-title" placeholder="Account Executive">
+            </div>
+            <div class="field">
+              <span class="fieldlabel" id="lbl-email">Email</span>
+              <div class="readonly" id="f-email" role="note" aria-labelledby="lbl-email">—</div>
+            </div>
+            <div class="field">
+              <label for="f-phone">Phone</label>
+              <input id="f-phone" data-model="phone" type="tel" autocomplete="tel" placeholder="+1 (555) 000-0000">
+            </div>
+          </div>
+        </section>
+
+        <!-- Step 2 -->
+        <section class="step-panel hidden" data-panel="2">
+          <h2>End customer</h2>
+          <div class="grid">
+            <div class="field">
+              <label for="f-customer">Customer organization</label>
+              <input id="f-customer" data-model="customer" type="text" placeholder="Springfield School District">
+            </div>
+            <div class="field">
+              <label for="f-state">State</label>
+              <select id="f-state" data-model="custState"><option value="">Select state…</option></select>
+              <span class="hint">Routes your registration to the right Artome rep.</span>
+            </div>
+            <div class="field span-2">
+              <label for="f-custContact">Contact person</label>
+              <input id="f-custContact" data-model="custContact" type="text" placeholder="Dr. Alan Reed, Director of Technology">
+            </div>
+            <div class="field">
+              <label for="f-custEmail">Contact email</label>
+              <input id="f-custEmail" data-model="custEmail" type="email" placeholder="a.reed@district.k12.us">
+            </div>
+            <div class="field">
+              <label for="f-custPhone">Contact phone</label>
+              <input id="f-custPhone" data-model="custPhone" type="tel" placeholder="+1 (555) 000-0000">
+            </div>
+          </div>
+          <fieldset class="sep" style="border:0;padding:0;margin-left:0;margin-right:0">
+            <legend style="padding:0;font-size:13px;font-weight:700;color:var(--grey-dark)">
+              Has the customer seen an Artome demo?
+            </legend>
+            <p class="hint" style="margin:3px 0 10px">Tells our team whether a demo needs scheduling.</p>
+            <div class="choices" id="demo-choices"></div>
+          </fieldset>
+        </section>
+
+        <!-- Step 3 -->
+        <section class="step-panel hidden" data-panel="3">
+          <h2>Products &amp; timeline</h2>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div id="product-list" style="display:flex;flex-direction:column;gap:12px"></div>
+            <div class="benefit">
+              Your deal registration benefit: <strong id="benefit-pct">—</strong>
+              <p>Applied to your partner pricing when the deal closes. Protected for
+                 <span id="benefit-days">—</span> days from approval. Final pricing is
+                 confirmed in your quote.</p>
+            </div>
+            <div class="field" style="max-width:260px">
+              <label for="f-closeDate">Expected close date</label>
+              <input id="f-closeDate" data-model="closeDate" type="date">
+            </div>
+          </div>
+        </section>
+
+        <!-- Step 4 -->
+        <section class="step-panel hidden" data-panel="4">
+          <h2>Review &amp; submit</h2>
+          <dl class="review" id="review"></dl>
+          <p class="hint" style="margin-top:16px;line-height:1.6">
+            Submitting creates a registration request for our sales team. We confirm within
+            2 business days. <strong style="font-weight:700">Protection starts when your
+            registration is approved</strong>, not when you submit.
+          </p>
+          <p class="error hidden" id="submit-error" role="alert" style="margin-top:12px"></p>
+        </section>
+      </div>
+
+      <div class="wizard-nav">
+        <button type="button" class="btn btn--ghost" id="btn-back">Back</button>
+        <button type="button" class="btn btn--dark" id="btn-next">Next</button>
+        <button type="button" class="btn btn--primary hidden" id="btn-submit">Submit registration</button>
+      </div>
+    </div>
+
+    <!-- ---------- Done ---------- -->
+    <div class="col hidden" id="done">
+      <div class="done">
+        <h1>Registration submitted.</h1>
+        <div class="laser laser--lg" aria-hidden="true"><i></i><b></b></div>
+        <p style="margin:22px 0 0;font-size:16px">
+          Your registration is now with our sales team. We'll confirm it within
+          <strong style="font-weight:800">2 business days</strong> — once approved, the deal is
+          protected for <strong style="font-weight:800" id="done-days">—</strong> days from the
+          approval date.
+        </p>
+        <div class="ref">Your reference<strong id="done-ref">—</strong></div>
+        <p style="margin:18px 0 0;font-size:14px">
+          Questions? <a href="mailto:sales@artomeusa.com">sales@artomeusa.com</a>
+        </p>
+        <button type="button" class="btn btn--dark" style="margin-top:28px" id="btn-again">
+          Register another deal
+        </button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+(() => {
+'use strict';
+
+/* ===========================================================================
+   Configuration.
+
+   Everything commercial (discount %, protection window, partner identity) is
+   resolved SERVER-SIDE from the authenticated session and arrives in the
+   session payload. Nothing commercially sensitive is hardcoded here, and no
+   API token ever reaches the browser.
+
+   Populate these two values at deploy time to leave preview mode.
+   =========================================================================== */
+const CONFIG = {
+  supabaseUrl:     'https://zmhlgyszqygmutdeywkm.supabase.co',
+  // Publishable key. Safe in the page by design: every table has RLS on and
+  // the commercial tables have no policy at all, so this key alone reads nothing.
+  supabaseAnonKey: 'sb_publishable_d6LlhdTMaecUWUDestGO2w_T3LObbbQ',
+  salesEmail:      'sales@artomeusa.com',
+};
+
+const IS_PREVIEW = !CONFIG.supabaseUrl || !CONFIG.supabaseAnonKey;
+
+/* Product catalogue. Verified against the live Pipedrive product list.
+   `pid` is the Pipedrive product id — unambiguous, unlike the Code field, which
+   for X10 literally reads "A01250 / PT-VMZ-AVCART". Neither is shown to the
+   partner. No descriptions, no prices: nothing here is invented.
+   Frame colour is not asked for at registration; it is settled at quoting. */
+const PRODUCTS = [
+  { model: 'S1',  sku: 'A00757',   pid: 28 },
+  { model: 'S2',  sku: 'A00777',   pid: 85 },
+  { model: 'M10', sku: 'A00523.F', pid: 4, eol: true },
+  { model: 'X10', sku: 'A01250',   pid: 86 },
+  { model: 'X12', sku: 'A01550',   pid: 94 },  // black frame A01555 not yet in Pipedrive
+  { model: 'X20', sku: 'A00589',   pid: 7 },   // A00590 = black frame
+];
+
+const DEMO_OPTIONS = [
+  { value: 'remote', label: 'Remote demo', hint: 'Online walkthrough done' },
+  { value: 'live',   label: 'Live demo',   hint: 'Seen the unit in person' },
+  { value: 'none',   label: 'No demo yet', hint: 'Demo still to be arranged' },
+];
+
+const STATES = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut',
+'Delaware','District of Columbia','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa',
+'Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota',
+'Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico',
+'New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island',
+'South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington',
+'West Virginia','Wisconsin','Wyoming'];
+
+const STEP_LABELS = ['You', 'Customer', 'Products', 'Confirm'];
+
+/* ===========================================================================
+   Backend seam.
+
+   Vaihe B replaces the preview branches with Supabase calls. The shape of
+   what each method returns is the contract the Edge Functions must honour.
+   =========================================================================== */
+const Api = {
+  async requestMagicLink(email) {
+    if (IS_PREVIEW) { await wait(400); return { ok: true }; }
+    const res = await fetch(CONFIG.supabaseUrl + '/functions/v1/partner-auth-request', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        apikey: CONFIG.supabaseAnonKey,
+        authorization: 'Bearer ' + CONFIG.supabaseAnonKey,
+      },
+      body: JSON.stringify({ email, redirectTo: location.origin + location.pathname }),
+    });
+    const body = await res.json().catch(() => ({}));
+    // The response is deliberately identical for allowed and unknown domains —
+    // it must not reveal who Artome's partners are. Only genuine failures throw.
+    if (!res.ok) {
+      throw new Error(body.message || 'Could not send the sign-in link. Please try again.');
+    }
+    return body;
+  },
+
+  async getSession() {
+    if (IS_PREVIEW) {
+      // Preview fixture. Mirrors the live US programme so the page can be
+      // reviewed end to end before the backend exists. Gated on the simulated
+      // sign-in so the login screens stay reviewable too.
+      if (sessionStorage.getItem('artome_preview_in') !== '1') return null;
+      return {
+        user:    { email: 'jane.doe@examplepartner.com' },
+        partner: { name: 'Example Partner Inc.', discountPct: 8, protectionDays: 180 },
+      };
+    }
+    const token = readAccessToken();
+    if (!token) return null;
+    const res = await fetch(CONFIG.supabaseUrl + '/functions/v1/partner-session', {
+      headers: { authorization: 'Bearer ' + token, apikey: CONFIG.supabaseAnonKey },
+    });
+    if (!res.ok) return null;
+    return res.json();
+  },
+
+  async submitRegistration(payload) {
+    if (IS_PREVIEW) { await wait(700); return { reference: 'PREVIEW-NOT-RECORDED' }; }
+    const res = await fetch(CONFIG.supabaseUrl + '/functions/v1/register-deal', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        apikey: CONFIG.supabaseAnonKey,
+        authorization: 'Bearer ' + readAccessToken(),
+      },
+      body: JSON.stringify(payload),
+    });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(body.message || 'Submission failed. Please try again.');
+    return body;
+  },
+
+  async signOut() {
+    try {
+      sessionStorage.removeItem(IS_PREVIEW ? 'artome_preview_in' : 'artome_at');
+    } catch (_) {}
+  },
+};
+
+function readAccessToken() {
+  try { return sessionStorage.getItem('artome_at'); } catch (_) { return null; }
+}
+
+/**
+ * The magic link returns the session in the URL fragment. Capture it, then
+ * strip it from the address bar so the token is not left sitting in history,
+ * in a bookmark, or in whatever the next screenshot captures.
+ */
+function captureTokenFromHash() {
+  if (!location.hash.includes('access_token=')) return;
+  const params = new URLSearchParams(location.hash.slice(1));
+  const token = params.get('access_token');
+  if (token) { try { sessionStorage.setItem('artome_at', token); } catch (_) {} }
+  history.replaceState(null, '', location.pathname + location.search);
+}
+
+const wait = ms => new Promise(r => setTimeout(r, ms));
+
+/* ===========================================================================
+   State
+   =========================================================================== */
+const state = {
+  step: 1,
+  session: null,
+  touched: false,          // only show validation hints after a blocked Next
+  submitting: false,
+  form: {
+    cname: '', ctitle: '', phone: '',
+    customer: '', custState: '', custContact: '', custEmail: '', custPhone: '',
+    demoStatus: '', closeDate: '',
+  },
+  qty: Object.fromEntries(PRODUCTS.map(p => [p.model, 0])),
+};
+
+const $  = sel => document.querySelector(sel);
+const $$ = sel => Array.from(document.querySelectorAll(sel));
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+/* ===========================================================================
+   Validation — mirrored server-side. The browser copy is a courtesy, never
+   the authority.
+   =========================================================================== */
+const RULES = {
+  1: [
+    ['cname',      v => v.trim().length > 1,        'Enter your name'],
+    ['phone',      v => v.trim().length >= 6,       'Enter a phone number'],
+  ],
+  2: [
+    ['customer',   v => v.trim().length > 1,        'Enter the customer organization'],
+    ['custState',  v => !!v,                        'Select a state'],
+    ['custContact',v => v.trim().length > 1,        'Enter a contact person'],
+    ['custEmail',  v => EMAIL_RE.test(v.trim()),    'Enter a valid email'],
+    ['custPhone',  v => v.trim().length >= 6,       'Enter a phone number'],
+    ['demoStatus', v => !!v,                        'Choose one'],
+  ],
+  3: [
+    ['closeDate',  v => !!v,                        'Choose an expected close date'],
+  ],
+  4: [],
+};
+
+function stepErrors(step) {
+  const errs = (RULES[step] || [])
+    .filter(([key, test]) => !test(state.form[key]))
+    .map(([key, , msg]) => ({ key, msg }));
+  if (step === 3 && totalUnits() === 0) errs.push({ key: '__qty', msg: 'Add at least one unit' });
+  return errs;
+}
+const stepValid = step => stepErrors(step).length === 0;
+const totalUnits = () => Object.values(state.qty).reduce((a, b) => a + b, 0);
+
+/* ===========================================================================
+   Rendering
+   =========================================================================== */
+function showScreen(id) {
+  ['screen-login', 'screen-sent', 'screen-app'].forEach(s => {
+    $('#' + s).classList.toggle('hidden', s !== id);
+  });
+}
+
+function renderStepper() {
+  const el = $('#stepper');
+  el.innerHTML = '';
+  el.style.listStyle = 'none';
+  el.style.padding = '0';
+  STEP_LABELS.forEach((label, i) => {
+    const num = i + 1;
+    if (i > 0) {
+      const line = document.createElement('li');
+      line.className = 'steps__line' + (num <= state.step ? ' is-done' : '');
+      line.setAttribute('aria-hidden', 'true');
+      el.appendChild(line);
+    }
+    const done = num < state.step, active = num === state.step;
+    const li = document.createElement('li');
+    li.className = 'step' + (active ? ' is-active' : '') + (done ? ' is-done' : '');
+    if (active) li.setAttribute('aria-current', 'step');
+    li.innerHTML =
+      '<span class="step__dot" aria-hidden="true">' + (done ? '✓' : num) + '</span>' +
+      '<span class="step__label">' + label + '</span>';
+    li.appendChild(Object.assign(document.createElement('span'), {
+      className: 'visually-hidden',
+      textContent: 'Step ' + num + ' of 4: ' + label + (done ? ' (completed)' : active ? ' (current)' : ''),
+    }));
+    el.appendChild(li);
+  });
+}
+
+function renderProducts() {
+  const list = $('#product-list');
+  list.innerHTML = '';
+  PRODUCTS.forEach(p => {
+    const n = state.qty[p.model];
+    const row = document.createElement('div');
+    row.className = 'product' + (n > 0 ? ' is-selected' : '');
+    row.innerHTML =
+      '<div class="product__name" id="p-' + p.model + '">Artome ' + p.model +
+        (p.eol ? '<span class="eol">End of life</span>' : '') + '</div>' +
+      '<div class="stepper">' +
+        '<button type="button" data-dec="' + p.model + '" aria-label="Remove one Artome ' + p.model + '"' +
+          (n === 0 ? ' disabled' : '') + '>−</button>' +
+        '<output aria-labelledby="p-' + p.model + '">' + n + '</output>' +
+        '<button type="button" data-inc="' + p.model + '" aria-label="Add one Artome ' + p.model + '">+</button>' +
+      '</div>';
+    list.appendChild(row);
+  });
+}
+
+function renderReview() {
+  const f = state.form, p = state.session.partner;
+  const products = PRODUCTS.filter(x => state.qty[x.model] > 0)
+    .map(x => state.qty[x.model] + ' × ' + x.model).join(', ') || '—';
+  const demo = (DEMO_OPTIONS.find(d => d.value === f.demoStatus) || {}).label || '—';
+  const rows = [
+    ['Partner',                 p.name + (f.cname ? ' — ' + f.cname : '')],
+    ['Your contact details',    [state.session.user.email, f.phone].filter(Boolean).join(' · ')],
+    ['End customer',            f.customer + (f.custState ? ', ' + f.custState : '')],
+    ['Customer contact',        f.custContact || '—'],
+    ['Customer email / phone',  [f.custEmail, f.custPhone].filter(Boolean).join(' · ') || '—'],
+    ['Artome demo',             demo],
+    ['Products',                products],
+    ['Expected close',          formatDate(f.closeDate)],
+    ['Deal registration',       '−' + p.discountPct + '% · ' + p.protectionDays + ' days once approved'],
+  ];
+  $('#review').innerHTML = rows.map(([k, v]) =>
+    '<div class="review__row"><dt>' + esc(k) + '</dt><dd>' + esc(v) + '</dd></div>').join('');
+}
+
+function render() {
+  const last = state.step === 4;
+  $$('.step-panel').forEach(el => {
+    el.classList.toggle('hidden', Number(el.dataset.panel) !== state.step);
+  });
+  renderStepper();
+  if (state.step === 3) renderProducts();
+  if (last) renderReview();
+
+  $('#btn-back').style.visibility = state.step > 1 ? 'visible' : 'hidden';
+  $('#btn-next').classList.toggle('hidden', last);
+  $('#btn-submit').classList.toggle('hidden', !last);
+  $('#btn-submit').disabled = state.submitting;
+  $('#btn-submit').textContent = state.submitting ? 'Submitting…' : 'Submit registration';
+
+  paintValidation();
+}
+
+/* Field-level messages appear only after the partner has been blocked once,
+   so the form never scolds someone who is still filling it in. */
+function paintValidation() {
+  $$('[data-model]').forEach(el => el.removeAttribute('aria-invalid'));
+  $$('.field-error').forEach(el => el.remove());
+  if (!state.touched) return;
+  stepErrors(state.step).forEach(({ key, msg }) => {
+    if (key === '__qty') {
+      const list = $('#product-list');
+      if (list) list.insertAdjacentHTML('afterend',
+        '<p class="error field-error" role="alert">' + esc(msg) + '</p>');
+      return;
+    }
+    const input = $('[data-model="' + key + '"]');
+    if (!input) return;
+    input.setAttribute('aria-invalid', 'true');
+    const holder = input.closest('.field') || input.parentElement;
+    holder.insertAdjacentHTML('beforeend',
+      '<span class="error field-error">' + esc(msg) + '</span>');
+  });
+  if (state.step === 2 && !state.form.demoStatus) {
+    const box = $('#demo-choices');
+    if (box && !box.nextElementSibling?.classList.contains('field-error')) {
+      box.insertAdjacentHTML('afterend',
+        '<p class="error field-error" role="alert" style="margin:8px 0 0">Choose one</p>');
+    }
+  }
+}
+
+const esc = s => String(s).replace(/[&<>"']/g, c =>
+  ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+function formatDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso + 'T00:00:00');
+  if (isNaN(d)) return iso;
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+/* ===========================================================================
+   Wiring
+   =========================================================================== */
+function buildStaticUi() {
+  const sel = $('#f-state');
+  STATES.forEach(s => sel.appendChild(new Option(s, s)));
+
+  $('#demo-choices').innerHTML = DEMO_OPTIONS.map(o =>
+    '<button type="button" class="choice" data-demo="' + o.value + '" aria-pressed="false">' +
+      '<strong>' + esc(o.label) + '</strong><span>' + esc(o.hint) + '</span>' +
+    '</button>').join('');
+
+  // Never allow a close date in the past.
+  $('#f-closeDate').min = new Date().toISOString().slice(0, 10);
+
+  if (IS_PREVIEW) {
+    $('#preview-banner').classList.remove('hidden');
+    $('#preview-signin').classList.remove('hidden');
+  }
+}
+
+function bindEvents() {
+  // --- login ---
+  $('#login-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const input = $('#login-email');
+    const email = input.value.trim();
+    const err = $('#login-error');
+    if (!EMAIL_RE.test(email)) {
+      err.textContent = 'Enter a valid work email address.';
+      err.classList.remove('hidden');
+      input.setAttribute('aria-invalid', 'true');
+      input.focus();
+      return;
+    }
+    err.classList.add('hidden');
+    input.removeAttribute('aria-invalid');
+    const btn = $('#login-submit');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    try {
+      const result = await Api.requestMagicLink(email);
+      $('#sent-email').textContent = email;
+      // Pilot only: the backend hands a sign-in token back directly for
+      // internal addresses so testing does not depend on email delivery.
+      const btn2 = $('#preview-signin');
+      if (result && result.pilotTokenHash) {
+        btn2.textContent = 'Open the sign-in link (pilot)';
+        btn2.dataset.tokenHash = result.pilotTokenHash;
+        btn2.classList.remove('hidden');
+      }
+      showScreen('screen-sent');
+      $('#use-other-email').focus();
+    } catch (ex) {
+      err.textContent = ex.message;
+      err.classList.remove('hidden');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Send sign-in link';
+    }
+  });
+
+  $('#use-other-email').addEventListener('click', () => {
+    showScreen('screen-login');
+    $('#login-email').focus();
+  });
+
+  // Stands in for clicking the emailed magic link. In preview mode it fakes a
+  // session; against the real backend it exchanges the pilot token for a
+  // session directly — no redirect, so this works at any hosted URL.
+  $('#preview-signin').addEventListener('click', async (e) => {
+    const btn = e.currentTarget;
+    const tokenHash = btn.dataset.tokenHash;
+    if (!tokenHash) {
+      sessionStorage.setItem('artome_preview_in', '1');
+      boot();
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = 'Signing in…';
+    try {
+      const res = await fetch(CONFIG.supabaseUrl + '/auth/v1/verify', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', apikey: CONFIG.supabaseAnonKey },
+        body: JSON.stringify({ type: 'magiclink', token_hash: tokenHash }),
+      });
+      const session = await res.json().catch(() => ({}));
+      if (!res.ok || !session.access_token) {
+        throw new Error(session.msg || session.error_description ||
+          'The sign-in link has expired. Request a new one.');
+      }
+      try { sessionStorage.setItem('artome_at', session.access_token); } catch (_) {}
+      delete btn.dataset.tokenHash; // single use
+      await boot();
+    } catch (ex) {
+      btn.textContent = ex.message;
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  // --- text inputs ---
+  document.addEventListener('input', e => {
+    const key = e.target.dataset && e.target.dataset.model;
+    if (!key) return;
+    state.form[key] = e.target.value;
+    if (state.touched) paintValidation();
+  });
+
+  // --- clicks ---
+  document.addEventListener('click', e => {
+    const t = e.target.closest('[data-demo],[data-inc],[data-dec]');
+    if (!t) return;
+    if (t.dataset.demo) {
+      state.form.demoStatus = t.dataset.demo;
+      $$('#demo-choices .choice').forEach(b =>
+        b.setAttribute('aria-pressed', String(b.dataset.demo === state.form.demoStatus)));
+      if (state.touched) paintValidation();
+    } else {
+      const model = t.dataset.inc || t.dataset.dec;
+      const delta = t.dataset.inc ? 1 : -1;
+      state.qty[model] = Math.max(0, Math.min(999, state.qty[model] + delta));
+      renderProducts();
+      if (state.touched) paintValidation();
+    }
+  });
+
+  // --- wizard nav ---
+  $('#btn-next').addEventListener('click', () => {
+    if (!stepValid(state.step)) {
+      state.touched = true;
+      paintValidation();
+      const first = document.querySelector('[aria-invalid="true"], .field-error');
+      if (first) (first.closest('.field')?.querySelector('input,select') || first)
+        .scrollIntoView({ block: 'center', behavior: 'smooth' });
+      return;
+    }
+    state.step = Math.min(4, state.step + 1);
+    state.touched = false;
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  $('#btn-back').addEventListener('click', () => {
+    state.step = Math.max(1, state.step - 1);
+    state.touched = false;
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  $('#btn-submit').addEventListener('click', submit);
+
+  $('#btn-again').addEventListener('click', () => {
+    Object.keys(state.form).forEach(k => { state.form[k] = ''; });
+    PRODUCTS.forEach(p => { state.qty[p.model] = 0; });
+    state.step = 1;
+    state.touched = false;
+    $$('[data-model]').forEach(el => { el.value = ''; });
+    $$('#demo-choices .choice').forEach(b => b.setAttribute('aria-pressed', 'false'));
+    $('#done').classList.add('hidden');
+    $('#wizard').classList.remove('hidden');
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  $('#sign-out').addEventListener('click', async () => {
+    await Api.signOut();
+    location.reload();
+  });
+}
+
+async function submit() {
+  if (state.submitting) return;
+  const errEl = $('#submit-error');
+  errEl.classList.add('hidden');
+  state.submitting = true;
+  render();
+  try {
+    // Quantities and product identity only — the server recomputes every
+    // commercial figure from the partner record.
+    const payload = {
+      contact:  { name: state.form.cname, title: state.form.ctitle, phone: state.form.phone },
+      customer: {
+        name:    state.form.customer,
+        state:   state.form.custState,
+        country: 'United States',
+        contact: {
+          name:  state.form.custContact,
+          email: state.form.custEmail,
+          phone: state.form.custPhone,
+        },
+      },
+      demoStatus:      state.form.demoStatus,
+      expectedCloseDate: state.form.closeDate,
+      products: PRODUCTS.filter(p => state.qty[p.model] > 0)
+        .map(p => ({ model: p.model, sku: p.sku, productId: p.pid, qty: state.qty[p.model] })),
+    };
+    const { reference } = await Api.submitRegistration(payload);
+    $('#done-ref').textContent = reference;
+    $('#done-days').textContent = state.session.partner.protectionDays;
+    $('#wizard').classList.add('hidden');
+    $('#done').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } catch (ex) {
+    errEl.textContent = ex.message;
+    errEl.classList.remove('hidden');
+  } finally {
+    state.submitting = false;
+    render();
+  }
+}
+
+/* ===========================================================================
+   Boot
+   =========================================================================== */
+async function boot() {
+  const session = await Api.getSession();
+  if (!session) { showScreen('screen-login'); return; }
+
+  state.session = session;
+  const { partner, user } = session;
+  $('#partner-pill').textContent = partner.name + ' · −' + partner.discountPct + '%';
+  $('#f-company').textContent = partner.name;
+  $('#f-email').textContent  = user.email;
+  $('#intro-days').textContent   = partner.protectionDays;
+  $('#benefit-pct').textContent  = '−' + partner.discountPct + '%';
+  $('#benefit-days').textContent = partner.protectionDays;
+
+  showScreen('screen-app');
+  render();
+}
+
+captureTokenFromHash();
+buildStaticUi();
+bindEvents();
+boot();
+})();
+</script>
+</body>
+</html>
