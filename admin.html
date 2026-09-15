@@ -167,8 +167,9 @@ function render(rows, dryRun) {
 
         <dl class="kv">
           <dt>Submitted by</dt><dd>${esc(r.contact_name)} · ${esc(r.submitted_by_email)}</dd>
-          <dt>Customer contact</dt><dd>${esc(r.customer_contact_name)} · ${esc(r.customer_contact_email)}</dd>
+          <dt>Customer contact</dt><dd>${esc(r.customer_contact_name)}${r.customer_contact_title ? ', ' + esc(r.customer_contact_title) : ''} · ${esc(r.customer_contact_email)}</dd>
           <dt>Products</dt><dd>${products}</dd>
+          <dt>Case so far</dt><dd style="font-weight:400">${esc(r.case_background || '—')}</dd>
           <dt>Demo</dt><dd>${esc(r.demo_status)}</dd>
           <dt>Expected close</dt><dd>${fmtDate(r.expected_close_date)}</dd>
           <dt>Terms</dt><dd>−${esc(r.discount_pct)}% · ${esc(r.protection_days)} days</dd>
