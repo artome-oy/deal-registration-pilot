@@ -43,6 +43,9 @@ body{
 }
 a{color:var(--navy);text-underline-offset:2px}
 a:hover{color:var(--orange)}
+/* An email address must never break across lines — a wrapped address reads
+   as two broken words. */
+a[href^="mailto:"]{white-space:nowrap;display:inline-block}
 h1,h2,h3{margin:0;line-height:1.2}
 img,svg{max-width:100%}
 
@@ -344,7 +347,7 @@ input[aria-invalid=true],select[aria-invalid=true]{border-color:var(--danger)}
               <input id="f-cname" data-model="cname" type="text" autocomplete="name" placeholder="Jane Doe">
             </div>
             <div class="field">
-              <label for="f-ctitle">Job title <span class="hint">(optional)</span></label>
+              <label for="f-ctitle">Job title</label>
               <input id="f-ctitle" data-model="ctitle" type="text" autocomplete="organization-title" placeholder="Account Executive">
             </div>
             <div class="field">
@@ -376,7 +379,7 @@ input[aria-invalid=true],select[aria-invalid=true]{border-color:var(--danger)}
               <input id="f-custContact" data-model="custContact" type="text" placeholder="Dr. Alan Reed">
             </div>
             <div class="field">
-              <label for="f-custTitle">Contact's job title <span class="hint">(optional)</span></label>
+              <label for="f-custTitle">Contact's job title</label>
               <input id="f-custTitle" data-model="custTitle" type="text" placeholder="Director of Technology">
             </div>
             <div class="field">
@@ -667,12 +670,14 @@ const okPhone = v => /^[+\-().\s\d]+$/.test(v.trim()) && (v.match(/\d/g) || []).
 const RULES = {
   1: [
     ['cname',      v => v.trim().length > 1,        'Enter your name'],
+    ['ctitle',     v => v.trim().length > 1,        'Enter your job title'],
     ['phone',      okPhone,                         'Enter a valid phone number'],
   ],
   2: [
     ['customer',   v => v.trim().length > 1,        'Enter the customer organization'],
     ['custState',  v => !!v,                        'Select a state'],
     ['custContact',v => v.trim().length > 1,        'Enter a contact person'],
+    ['custTitle',  v => v.trim().length > 1,        "Enter the contact's job title"],
     ['custEmail',  v => EMAIL_RE.test(v.trim()),    'Enter a valid email'],
     ['custPhone',  okPhone,                         'Enter a valid phone number'],
     ['caseBackground', v => v.trim().length >= 10,  'Tell us briefly what has been done so far'],
@@ -740,11 +745,11 @@ function renderProducts() {
     row.className = 'product' + (n > 0 ? ' is-selected' : '');
     row.innerHTML =
       '<div class="product__name" id="p-' + p.model + '">Artome ' + p.model +
-        (p.eol ? '<span class="eol">End of life</span>' : '') + '</div>' +
+        (p.eol ? '<span class="eol">EOL 12/2026</span>' : '') + '</div>' +
       '<div class="stepper">' +
         '<button type="button" data-dec="' + p.model + '" aria-label="Remove one Artome ' + p.model + '"' +
           (n === 0 ? ' disabled' : '') + '>−</button>' +
-        '<input type="number" class="qty" inputmode="numeric" min="0" max="999" step="1"' +
+        '<input type="number" class="qty" inputmode="numeric" min="0" max="5000" step="1"' +
           ' data-qty="' + p.model + '" value="' + n + '"' +
           ' aria-label="Quantity of Artome ' + p.model + '">' +
         '<button type="button" data-inc="' + p.model + '" aria-label="Add one Artome ' + p.model + '">+</button>' +
@@ -993,7 +998,7 @@ function bindEvents() {
       const model = t.dataset.qty;
       let n = parseInt(t.value, 10);
       if (isNaN(n) || n < 0) n = 0;
-      if (n > 999) { n = 999; t.value = '999'; }
+      if (n > 5000) { n = 5000; t.value = '5000'; }
       state.qty[model] = n;
       const row = t.closest('.product');
       if (row) {
@@ -1030,7 +1035,7 @@ function bindEvents() {
     } else {
       const model = t.dataset.inc || t.dataset.dec;
       const delta = t.dataset.inc ? 1 : -1;
-      state.qty[model] = Math.max(0, Math.min(999, state.qty[model] + delta));
+      state.qty[model] = Math.max(0, Math.min(5000, state.qty[model] + delta));
       renderProducts();
       if (state.touched) paintValidation();
     }
