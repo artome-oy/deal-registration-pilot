@@ -636,6 +636,30 @@ function captureTokenFromHash() {
   history.replaceState(null, '', location.pathname + location.search);
 }
 
+/**
+ * The emailed sign-in link carries a one-time token hash (?token_hash=…).
+ * Exchange it for a session directly — no redirect round-trip — then strip
+ * it from the address bar. An expired or used hash simply falls through to
+ * the sign-in screen, where a fresh link can be requested.
+ */
+async function captureTokenFromQuery() {
+  const params = new URLSearchParams(location.search);
+  const th = params.get('token_hash');
+  if (!th) return;
+  history.replaceState(null, '', location.pathname);
+  try {
+    const res = await fetch(CONFIG.supabaseUrl + '/auth/v1/verify', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', apikey: CONFIG.supabaseAnonKey },
+      body: JSON.stringify({ type: 'magiclink', token_hash: th }),
+    });
+    const session = await res.json().catch(() => ({}));
+    if (session.access_token) {
+      try { sessionStorage.setItem('artome_at', session.access_token); } catch (_) {}
+    }
+  } catch (_) {}
+}
+
 const wait = ms => new Promise(r => setTimeout(r, ms));
 
 /* ===========================================================================
@@ -1171,7 +1195,7 @@ async function boot() {
 captureTokenFromHash();
 buildStaticUi();
 bindEvents();
-boot();
+(async () => { await captureTokenFromQuery(); await boot(); })();
 })();
 </script>
 </body>
