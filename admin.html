@@ -85,7 +85,11 @@ pre{background:var(--page);border-radius:8px;padding:12px;overflow:auto;
 
 <header>
   <h1>Deal Registration <span>Review queue</span></h1>
-  <div id="who" class="muted"></div>
+  <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+    <select id="repfilter" class="hidden" aria-label="Filter by sales rep"
+      style="border:1px solid var(--grey-light);border-radius:8px;padding:8px 10px;font:inherit;font-weight:700;font-size:13px;background:var(--white)"></select>
+    <div id="who" class="muted"></div>
+  </div>
 </header>
 
 <main>
@@ -110,6 +114,18 @@ const FN = 'https://zmhlgyszqygmutdeywkm.supabase.co/functions/v1/admin-registra
 
 const $ = s => document.querySelector(s);
 let token = '';
+let allRows = [];
+let dryFlag = false;
+
+// Pipedrive user ids → names, for the per-rep filter and the card row.
+const OWNER_NAMES = {
+  13041992: 'Rauno Kettunen',
+  27369008: 'Ryan Williams',
+  27976549: 'John Schmulling',
+  29030063: 'Karly Rogers',
+  13300635: 'Juho Lehesvaara',
+};
+const repName = id => OWNER_NAMES[id] || (id ? 'Rep #' + id : '—');
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c =>
   ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -129,6 +145,21 @@ async function call(method, body) {
   const json = await res.json().catch(() => ({}));
   if (!res.ok && res.status !== 502) throw new Error(json.message || `HTTP ${res.status}`);
   return json;
+}
+
+function buildRepFilter() {
+  const sel = $('#repfilter');
+  const prev = sel.value;
+  const ids = [...new Set(allRows.map(r => r.assigned_owner_id).filter(Boolean))];
+  sel.innerHTML = '<option value="">All reps</option>' +
+    ids.map(i => `<option value="${i}">${esc(repName(i))}</option>`).join('');
+  if (ids.some(i => String(i) === prev)) sel.value = prev;
+  sel.classList.toggle('hidden', allRows.length === 0);
+}
+
+function applyFilter() {
+  const v = $('#repfilter').value;
+  render(v ? allRows.filter(r => String(r.assigned_owner_id) === v) : allRows, dryFlag);
 }
 
 function render(rows, dryRun) {
@@ -166,6 +197,7 @@ function render(rows, dryRun) {
         ${r.sync_error ? `<div class="err"><b>CRM sync error:</b> ${esc(r.sync_error)}</div>` : ''}
 
         <dl class="kv">
+          <dt>Assigned rep</dt><dd>${esc(repName(r.assigned_owner_id))}</dd>
           <dt>Submitted by</dt><dd>${esc(r.contact_name)} · ${esc(r.submitted_by_email)}</dd>
           <dt>Customer contact</dt><dd>${esc(r.customer_contact_name)}${r.customer_contact_title ? ', ' + esc(r.customer_contact_title) : ''} · ${esc(r.customer_contact_email)}</dd>
           <dt>Products</dt><dd>${products}</dd>
@@ -191,8 +223,15 @@ function render(rows, dryRun) {
 
 async function load() {
   const { registrations, dryRun } = await call('GET');
-  render(registrations || [], dryRun);
+  allRows = registrations || [];
+  dryFlag = dryRun;
+  buildRepFilter();
+  applyFilter();
 }
+
+document.addEventListener('change', e => {
+  if (e.target.id === 'repfilter') applyFilter();
+});
 
 $('#gate').addEventListener('submit', async e => {
   e.preventDefault();
